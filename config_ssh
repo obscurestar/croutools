@@ -1,0 +1,19 @@
+#!/bin/bash
+sudo apt-get install iptables openssh-server
+
+#Looks like this is already in there by default.
+#cmd="/sbin/iptables -I INPUT -p tcp --dport 22  -j ACCEPT"
+#file=/etc/rc.local
+#if [ `grep "$cmd" $file | wc -l` -eq 0 ]
+#then
+#	echo "adding $cmd to $file"
+#	sudo echo $cmd >> $file
+#else
+#	echo "iptables command already in $file"
+#fi
+#sudo vi $file 
+
+sudo mkdir -p -m0755 /var/run/sshd
+/usr/sbin/sshd
+sudo systemctl start ssh
+hostname -I

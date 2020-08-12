@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#############UTILITY
+function get_real_port_id()
+{
+	psresult=`ps -aef | egrep -e "tightvnc.*rfbport" | egrep -v "grep"`
+	IFS=' '
+	read -a strarr <<< "$psresult"
+
+	found=0
+	for param in "${strarr[@]}";
+	do
+		if [ $found -eq 1 ]
+		then
+			PORT="$param"
+			return
+		fi
+
+		if [ "$param" == '-rfbport' ]
+		then
+			found=1
+		fi
+	done
+}
+
+
+#########MAIN
+sudo pkill tightvnc
+#sudo rm -rf /home/samantha/.vnc
+sudo tightvncserver -geometry 1366x768	#Makes our login root tho. :(
+
+PORT=5902
+get_real_port_id
+echo Accepting remote connections on `hostname -I|cut -d" " -f1`:$PORT
+
+
